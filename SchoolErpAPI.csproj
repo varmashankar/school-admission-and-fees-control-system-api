@@ -132,6 +132,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseScripts\AdmissionFunnel.sql" />
+    <Content Include="DatabaseScripts\FeeWhatsappReminderQueue.sql" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -140,12 +142,15 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BAL\BALAcademicYears.cs" />
+    <Compile Include="BAL\BALAccountabilityDashboard.cs" />
     <Compile Include="BAL\BALActionNames.cs" />
     <Compile Include="BAL\BALAdmin.cs" />
     <Compile Include="BAL\BALAttendanceMaster.cs" />
     <Compile Include="BAL\BALClasses.cs" />
     <Compile Include="BAL\BALDashboard.cs" />
     <Compile Include="BAL\BALEmergencyContacts.cs" />
+    <Compile Include="BAL\BALFees.cs" />
+    <Compile Include="BAL\BALInquiries.cs" />
     <Compile Include="BAL\BALPermission.cs" />
     <Compile Include="BAL\BALPreviousSchool.cs" />
     <Compile Include="BAL\BALRoleTypes.cs" />
@@ -157,12 +162,15 @@
     <Compile Include="BAL\BALSuperAdmin.cs" />
     <Compile Include="BAL\BALTeachers.cs" />
     <Compile Include="Controllers\AcademicYearController.cs" />
+    <Compile Include="Controllers\AccountabilityDashboardController.cs" />
     <Compile Include="Controllers\ActionNamesController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EmergencyContactsController.cs" />
+    <Compile Include="Controllers\FeesController.cs" />
+    <Compile Include="Controllers\InquiriesController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\PreviousSchoolController.cs" />
     <Compile Include="Controllers\RoleTypesController.cs" />
@@ -177,22 +185,45 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AcademicYears.cs" />
+    <Compile Include="Models\AccountabilityDashboard.cs" />
     <Compile Include="Models\AdmissionForm.cs" />
     <Compile Include="Models\AttendanceMaster.cs" />
     <Compile Include="Models\Bean.cs" />
     <Compile Include="Models\Classes.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\ConversionReportFilter.cs" />
     <Compile Include="Models\CustomHeaderFilter.cs" />
     <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\DBConnection.cs" />
+    <Compile Include="Models\FeeDueFilter.cs" />
+    <Compile Include="Models\FeeHeadModels.cs" />
+    <Compile Include="Models\FeePaymentRequest.cs" />
+    <Compile Include="Models\FeePaymentResult.cs" />
+    <Compile Include="Models\FeePendingInstallment.cs" />
+    <Compile Include="Models\FeeReminderQueueFilter.cs" />
+    <Compile Include="Models\FeeReminderQueueItem.cs" />
+    <Compile Include="Models\FeeWhatsappSendModels.cs" />
     <Compile Include="Models\Function.cs" />
+    <Compile Include="Models\Inquiry.cs" />
+    <Compile Include="Models\InquiryConversionReportItem.cs" />
+    <Compile Include="Models\InquiryFilter.cs" />
+    <Compile Include="Models\InquiryFollowUp.cs" />
+    <Compile Include="Models\InquiryStatus.cs" />
+    <Compile Include="Models\InquiryStatusHistory.cs" />
+    <Compile Include="Models\MarkFeeReminderFailedRequest.cs" />
+    <Compile Include="Models\MarkFeeReminderSentRequest.cs" />
+    <Compile Include="Models\MarkFollowUpRemindedRequest.cs" />
+    <Compile Include="Models\OutstandingFeeItem.cs" />
+    <Compile Include="Models\OutstandingFeesFilter.cs" />
+    <Compile Include="Models\OutstandingFeesReport.cs" />
     <Compile Include="Models\Return.cs" />
     <Compile Include="Models\Rooms.cs" />
     <Compile Include="Models\Streams.cs" />
     <Compile Include="Models\Students.cs" />
     <Compile Include="Models\Teachers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\WhatsappProviderClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

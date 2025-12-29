@@ -186,46 +186,66 @@ namespace SchoolErpAPI.Models
         /// Bind DataTable to a List of Objects
         public static T BindData<T>(DataRow dr, List<string> columns)
         {
-
             // Create object
             var ob = Activator.CreateInstance<T>();
 
             // Get all fields
             var fields = typeof(T).GetFields();
-            foreach (var fieldInfo in fields) // Iterate through each field in the object type
+            foreach (var fieldInfo in fields)
             {
-                // Check if the field name exists in the DataRow columns
                 if (columns.Contains(fieldInfo.Name))
                 {
-                    // Fill the data into the field
                     fieldInfo.SetValue(ob, dr[fieldInfo.Name]);
                 }
             }
 
-            // Create a contract resolver for property names
             DefaultContractResolver ContractResolver = new DefaultContractResolver
             {
-                NamingStrategy = new SnakeCaseNamingStrategy() // Use snake_case naming strategy for property names
+                NamingStrategy = new SnakeCaseNamingStrategy()
             };
 
-            // Get all properties
             var properties = typeof(T).GetProperties();
+
+            // NOTE: legacy direct assignment removed; conversion-aware mapping below handles strings, nullables, enums.
+
             foreach (var propertyInfo in properties)
             {
-                string name = ContractResolver.GetResolvedPropertyName(propertyInfo.Name); // Convert property name to snake_case
-                if (columns.Contains(name))
+                string name = ContractResolver.GetResolvedPropertyName(propertyInfo.Name);
+                if (!columns.Contains(name))
+                    continue;
+
+                object raw = dr[name];
+                if (raw == null || raw == DBNull.Value)
+                    continue;
+
+                var targetType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+
+                try
                 {
-                    // Fill the data into the property
-                    if (!string.IsNullOrEmpty(dr[name].ToString())) // Check if the DataRow value is not null or empty
+                    if (targetType == typeof(string))
                     {
-                        if (dr[name].GetType() != typeof(System.DateTime))
-                            propertyInfo.SetValue(ob, dr[name]); // Set the property value directly if it's not a DateTime type
-                        else
-                        {
-                            string value = dr[name].ToString(); // Convert the DataRow value to a string
-                            propertyInfo.SetValue(ob, value); // Set the property value as a string
-                        }
+                        propertyInfo.SetValue(ob, Convert.ToString(raw));
+                        continue;
                     }
+
+                    object converted;
+                    if (targetType.IsEnum)
+                    {
+                        converted = Enum.Parse(targetType, Convert.ToString(raw), true);
+                    }
+                    else
+                    {
+                        converted = Convert.ChangeType(raw, targetType);
+                    }
+
+                    propertyInfo.SetValue(ob, converted);
+                }
+                catch (Exception ex)
+                {
+                    string srcType = raw == null ? "<null>" : raw.GetType().FullName;
+                    string dstType = propertyInfo.PropertyType == null ? "<null>" : propertyInfo.PropertyType.FullName;
+                    string msg = "BindData mapping failed. Model=" + typeof(T).FullName + ", Column=" + name + ", ValueType=" + srcType + ", Property=" + propertyInfo.Name + ", PropertyType=" + dstType + ", Value=" + Convert.ToString(raw) + ". Error=" + ex.Message;
+                    throw new InvalidOperationException(msg, ex);
                 }
             }
 
