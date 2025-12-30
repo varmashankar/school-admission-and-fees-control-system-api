@@ -4,8 +4,8 @@ namespace SchoolErpAPI.Models
 {
     public class InquiryFollowUp
     {
-        public long? id { get; set; }
-        public long? inquiryId { get; set; }
+        public int? id { get; set; }
+        public int? inquiryId { get; set; }
 
         public string followUpAt { get; set; }
         public string channel { get; set; }
@@ -14,8 +14,8 @@ namespace SchoolErpAPI.Models
         public bool? isReminded { get; set; }
         public string remindedAt { get; set; }
 
-        public long? createdById { get; set; }
-        public long? roleId { get; set; }
+        public int? userId { get; set; }
+        public int? roleId { get; set; }
 
         public string createdAt { get; set; }
     }

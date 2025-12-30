@@ -17,7 +17,7 @@ namespace SchoolErpAPI.Controllers
             {
                 if (dataString == null) return Return.returnHttp("201", "Invalid request.");
 
-                if (!string.IsNullOrWhiteSpace(dataString.status) && !InquiryStatus.IsValid(dataString.status))
+                if (!string.IsNullOrWhiteSpace(dataString.inquiryStatus) && !InquiryStatus.IsValid(dataString.inquiryStatus))
                     return Return.returnHttp("201", "Invalid inquiry status.");
 
                 BALInquiries bal = new BALInquiries();
@@ -104,13 +104,13 @@ namespace SchoolErpAPI.Controllers
             try
             {
                 if (!dataString.id.HasValue) return Return.returnHttp("201", "Invalid inquiry selected.");
-                if (!InquiryStatus.IsValid(dataString.status)) return Return.returnHttp("201", "Invalid inquiry status.");
+                if (!InquiryStatus.IsValid(dataString.inquiryStatus)) return Return.returnHttp("201", "Invalid inquiry status.");
 
                 long? userId = null;
                 long? roleId = null;
                 TryPopulateAuditFromToken(ref userId, ref roleId);
 
-                dataString.createdById = userId.HasValue ? (int?)Convert.ToInt32(userId.Value) : (int?)null;
+                dataString.userId = userId.HasValue ? (int?)Convert.ToInt32(userId.Value) : (int?)null;
                 dataString.roleId = roleId.HasValue ? (int?)Convert.ToInt32(roleId.Value) : (int?)null;
 
                 BALInquiries bal = new BALInquiries();
@@ -181,7 +181,7 @@ namespace SchoolErpAPI.Controllers
                 long? roleId = null;
                 TryPopulateAuditFromToken(ref userId, ref roleId);
 
-                dataString.createdById = userId.HasValue ? (int?)Convert.ToInt32(userId.Value) : (int?)null;
+                dataString.userId = userId.HasValue ? (int?)Convert.ToInt32(userId.Value) : (int?)null;
                 dataString.roleId = roleId.HasValue ? (int?)Convert.ToInt32(roleId.Value) : (int?)null;
 
                 BALInquiries bal = new BALInquiries();

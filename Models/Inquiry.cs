@@ -20,13 +20,14 @@ namespace SchoolErpAPI.Models
         public string source { get; set; }
         public string notes { get; set; }
 
-        public string status { get; set; }
+        public bool? status { get; set; }
+        public string inquiryStatus { get; set; }
 
         public string nextFollowUpAt { get; set; }
 
         public int? convertedStudentId { get; set; }
 
-        public int? createdById { get; set; }
+        public int? userId { get; set; }
         public int? roleId { get; set; }
 
         public string createdAt { get; set; }

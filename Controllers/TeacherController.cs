@@ -18,6 +18,50 @@ namespace SchoolErpAPI.Controllers
         }
         #endregion
 
+        #region login
+        [HttpPost]
+        public HttpResponseMessage login(Login dataString)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(dataString.username))
+                {
+                    return Return.returnHttp("201", "Please Enter Username, It's a Mandatory.");
+                }
+
+                if (string.IsNullOrEmpty(dataString.password))
+                {
+                    return Return.returnHttp("201", "Please Enter Password, It's a Mandatory.");
+                }
+
+                //Creation Timestamp
+                TimeZoneInfo INDIA_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                DateTime datetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), INDIA_ZONE);
+                dataString.creationTimestamp = datetime.ToString("MM/dd/yyyy HH:mm:ss");
+
+                BALTeachers func = new BALTeachers();
+                LoginResponse response = func.chkTeacherName(dataString);
+
+                if (response.executionStatus != "TRUE")
+                {
+                    return Return.returnHttp("201", response.message);
+                }
+
+                int id = Convert.ToInt32(response.id);
+                int roleTypeId = Convert.ToInt32(response.roleTypeId);
+
+                HttpResponseMessage httpResponse = Return.returnHttp("200", response.message);
+                httpResponse.Headers.Add("token", CreateToken(id, roleTypeId));
+
+                return httpResponse;
+            }
+            catch (Exception e)
+            {
+                return Return.returnHttp("201", "Some Internal Issue Occured. Please try again." + e.Message + e.StackTrace);
+            }
+        }
+        #endregion
+
         #region saveTeachers
         [HttpPost]
         public HttpResponseMessage saveTeachers(Teachers dataString)

@@ -180,5 +180,34 @@ namespace SchoolErpAPI.BAL
             return list;
         }
         #endregion
+
+        #region chkTeacherName
+        public LoginResponse chkTeacherName(Login dataString)
+        {
+            SqlCommand cmd = new SqlCommand("chkTeacherName", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            Function function = new Function();
+            function.addClassAttributes<Login>(ref cmd, dataString);
+            function.addDefaultSPOutput(ref cmd);
+
+            cmd.Parameters.Add("@roleTypeId", SqlDbType.Int, 4);
+            cmd.Parameters["@roleTypeId"].Direction = ParameterDirection.Output;
+
+            LoginResponse response = new LoginResponse();
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+
+            response.message = Convert.ToString(cmd.Parameters["@message"].Value);
+            response.id = Convert.ToInt32(cmd.Parameters["@outputId"].Value);
+            response.executionStatus = Convert.ToString(cmd.Parameters["@executionStatus"].Value);
+            response.roleTypeId = Convert.ToInt32(cmd.Parameters["@roleTypeId"].Value);
+
+            con.Close();
+
+            return response;
+        }
+        #endregion
     }
 }

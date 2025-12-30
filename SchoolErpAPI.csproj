@@ -160,6 +160,7 @@
     <Compile Include="BAL\BALStudentParents.cs" />
     <Compile Include="BAL\BALStudents.cs" />
     <Compile Include="BAL\BALSuperAdmin.cs" />
+    <Compile Include="BAL\BALTeacherDashboard.cs" />
     <Compile Include="BAL\BALTeachers.cs" />
     <Compile Include="Controllers\AcademicYearController.cs" />
     <Compile Include="Controllers\AccountabilityDashboardController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\SuperAdminController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
+    <Compile Include="Controllers\TeacherDashboardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -221,6 +223,7 @@
     <Compile Include="Models\Rooms.cs" />
     <Compile Include="Models\Streams.cs" />
     <Compile Include="Models\Students.cs" />
+    <Compile Include="Models\TeacherDashboard.cs" />
     <Compile Include="Models\Teachers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\WhatsappProviderClient.cs" />

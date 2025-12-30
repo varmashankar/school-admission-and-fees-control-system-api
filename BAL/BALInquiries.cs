@@ -21,8 +21,8 @@ namespace SchoolErpAPI.BAL
         {
             if (data == null) throw new ArgumentNullException("data");
 
-            if (string.IsNullOrWhiteSpace(data.status))
-                data.status = InquiryStatus.New;
+            if (string.IsNullOrWhiteSpace(data.inquiryStatus))
+                data.inquiryStatus = InquiryStatus.New;
 
             SqlCommand cmd = new SqlCommand("saveInquiry", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -78,7 +78,7 @@ namespace SchoolErpAPI.BAL
 
             cmd.Parameters.AddWithValue("@id", (object)data.id ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@status", (object)data.status ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@userId", (object)data.createdById ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@userId", (object)data.userId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@roleTypeId", (object)data.roleId ?? DBNull.Value);
 
             Function function = new Function();
