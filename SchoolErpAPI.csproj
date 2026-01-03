@@ -155,6 +155,7 @@
     <Compile Include="BAL\BALPreviousSchool.cs" />
     <Compile Include="BAL\BALRoleTypes.cs" />
     <Compile Include="BAL\BALRooms.cs" />
+    <Compile Include="BAL\BALSchool.cs" />
     <Compile Include="BAL\BALStreams.cs" />
     <Compile Include="BAL\BALStudentDocuments.cs" />
     <Compile Include="BAL\BALStudentParents.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Controllers\PreviousSchoolController.cs" />
     <Compile Include="Controllers\RoleTypesController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\StreamsController.cs" />
     <Compile Include="Controllers\StudentDocumentsController.cs" />
     <Compile Include="Controllers\StudentParentsController.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Models\OutstandingFeesReport.cs" />
     <Compile Include="Models\Return.cs" />
     <Compile Include="Models\Rooms.cs" />
+    <Compile Include="Models\School.cs" />
     <Compile Include="Models\Streams.cs" />
     <Compile Include="Models\Students.cs" />
     <Compile Include="Models\TeacherDashboard.cs" />
