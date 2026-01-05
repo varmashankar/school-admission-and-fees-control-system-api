@@ -37,8 +37,10 @@ namespace SchoolErpAPI.BAL
             Adp = new SqlDataAdapter("getStudentDocuments", con);
             Adp.SelectCommand.CommandType = CommandType.StoredProcedure;
 
-            Function function = new Function();
-            function.addClassAttributes<StudentDocuments>(ref Adp, dataString);
+            // NOTE: The getStudentDocuments SP in some DBs only accepts @studentId (and/or @id).
+            // Passing all properties via addClassAttributes can cause: 'too many arguments specified'.
+            Adp.SelectCommand.Parameters.AddWithValue("@id", (object)dataString.id ?? DBNull.Value);
+            Adp.SelectCommand.Parameters.AddWithValue("@studentId", (object)dataString.studentId ?? DBNull.Value);
 
             Dt = new DataTable();
             Adp.Fill(Dt);

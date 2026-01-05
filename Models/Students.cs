@@ -81,7 +81,7 @@ namespace SchoolErpAPI.Models
         public bool isTransportRequired { get; set; }
         public string siblingInfo { get; set; }
         public string medicalInfo { get; set; }
-
+        public string admissionNo { get; set; }
         public bool? deleted { get; set; }
         public string deletedTimestamp { get; set; }
         public int? deletedById { get; set; }

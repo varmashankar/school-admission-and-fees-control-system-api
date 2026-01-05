@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SchoolErpAPI.Controllers
 {
@@ -26,6 +28,36 @@ namespace SchoolErpAPI.Controllers
             {
                 if (string.IsNullOrWhiteSpace(dataString.firstName))
                     return Return.returnHttp("201", new { message = "Please Enter Student First Name." });
+
+                // If creating a new student, studentCode is required (DB unique index)
+                if (!dataString.id.HasValue && string.IsNullOrWhiteSpace(dataString.studentCode))
+                    return Return.returnHttp("201", new { message = "Student Code is required." });
+
+                // If updating and admissionNo is missing, preserve existing value
+                if (dataString.id.HasValue && string.IsNullOrWhiteSpace(dataString.admissionNo))
+                {
+                    try
+                    {
+                        BALStudents balRead = new BALStudents();
+                        var existing = balRead.getStudentDetails(new StudentFilter { id = dataString.id });
+                        if (existing != null)
+                        {
+                            // GetStudents does not currently expose admissionNo; if later added, keep it.
+                            var jsonExisting = JsonConvert.SerializeObject(existing);
+                            var tok = JToken.Parse(jsonExisting);
+                            JObject s = tok.Type == JTokenType.Array ? (JObject)tok.First : (JObject)tok;
+                            if (s != null)
+                            {
+                                if (s["admissionNo"] != null) dataString.admissionNo = Convert.ToString(s["admissionNo"]);
+                                else if (s["admission_no"] != null) dataString.admissionNo = Convert.ToString(s["admission_no"]);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignore; SP may still validate/handle
+                    }
+                }
 
                 // Set creation timestamp
                 TimeZoneInfo INDIA_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
@@ -49,12 +81,12 @@ namespace SchoolErpAPI.Controllers
                 if (response.executionStatus == "TRUE")
                 {
                     // SUCCESS
-                    return Return.returnHttp("200", response.message);
+                    return Return.returnHttp("200", new { message = response.message, id = response.id });
                 }
                 else
                 {
                     // FAILURE
-                    return Return.returnHttp("201", response.message);
+                    return Return.returnHttp("201", new { message = response.message, id = response.id });
                 }
             }
             catch (Exception ex)

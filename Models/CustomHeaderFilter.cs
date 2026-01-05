@@ -103,8 +103,6 @@ namespace SchoolErpAPI.Models
             //get full URL of the request
             string controllerNm = request.RequestUri.ToString().ToLower();
 
-            //request.Content = null;
-
             //only proceed if request has body and is not a Swagger request
             if (request.Content != null && !controllerNm.Contains("swagger"))
             {
@@ -136,28 +134,42 @@ namespace SchoolErpAPI.Models
                     request.Headers.Add("loginAs", tokenResponse.loginAs);
                 }
 
-                //Injecting into json body (if not file upload) --reads the body (JSON), adds userId and roleTypeId (loginAs), and writes it back.
-                if (!controllerNm.Contains("fileupload"))
+                //Injecting into json body (if not file upload)
+                // Guard: only mutate body for verbs that should have a body and when we have a real JSON payload
+                if (!controllerNm.Contains("fileupload") &&
+                    request.Method != HttpMethod.Get &&
+                    request.Method != HttpMethod.Head)
                 {
-
                     var requestBody = await request.Content.ReadAsStringAsync();
-
-                    dynamic value = JsonConvert.DeserializeObject<dynamic>(requestBody);
-
-                    if (!String.IsNullOrEmpty(tokenResponse.userId))
+                    if (!string.IsNullOrWhiteSpace(requestBody))
                     {
-                        value.userId = tokenResponse.userId;
+                        dynamic value = null;
+                        try { value = JsonConvert.DeserializeObject<dynamic>(requestBody); }
+                        catch { value = null; }
+
+                        if (value != null)
+                        {
+                            if (!String.IsNullOrEmpty(tokenResponse.userId))
+                            {
+                                value.userId = tokenResponse.userId;
+                            }
+                            if (!String.IsNullOrEmpty(tokenResponse.loginAs))
+                            {
+                                value.roleTypeId = tokenResponse.loginAs;
+                            }
+
+                            string valueStr = JsonConvert.SerializeObject(value);
+
+                            string mediaType = null;
+                            try { mediaType = request.Content.Headers.ContentType != null ? request.Content.Headers.ContentType.MediaType : null; }
+                            catch { mediaType = null; }
+                            if (string.IsNullOrWhiteSpace(mediaType))
+                                mediaType = "application/json";
+
+                            request.Properties["Content"] = valueStr;
+                            request.Content = new StringContent(valueStr, Encoding.UTF8, mediaType);
+                        }
                     }
-                    if (!String.IsNullOrEmpty(tokenResponse.loginAs))
-                    {
-                        value.roleTypeId = tokenResponse.loginAs;
-                    }
-
-                    string valueStr = JsonConvert.SerializeObject(value);
-
-                    request.Properties["Content"] = valueStr;
-                    request.Content = new StringContent(valueStr, Encoding.UTF8, request.Content.Headers.ContentType.MediaType);
-
                 }
             }
 

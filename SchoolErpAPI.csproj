@@ -132,6 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseScripts\AdmissionDrafts.sql" />
     <Content Include="DatabaseScripts\AdmissionFunnel.sql" />
     <Content Include="DatabaseScripts\FeeWhatsappReminderQueue.sql" />
     <Content Include="Global.asax" />
@@ -145,6 +146,7 @@
     <Compile Include="BAL\BALAccountabilityDashboard.cs" />
     <Compile Include="BAL\BALActionNames.cs" />
     <Compile Include="BAL\BALAdmin.cs" />
+    <Compile Include="BAL\BALAdmissionDrafts.cs" />
     <Compile Include="BAL\BALAttendanceMaster.cs" />
     <Compile Include="BAL\BALClasses.cs" />
     <Compile Include="BAL\BALDashboard.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="Controllers\AccountabilityDashboardController.cs" />
     <Compile Include="Controllers\ActionNamesController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdmissionsDraftController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -190,6 +193,8 @@
     </Compile>
     <Compile Include="Models\AcademicYears.cs" />
     <Compile Include="Models\AccountabilityDashboard.cs" />
+    <Compile Include="Models\AdmissionDraft.cs" />
+    <Compile Include="Models\AdmissionDraftSteps.cs" />
     <Compile Include="Models\AdmissionForm.cs" />
     <Compile Include="Models\AttendanceMaster.cs" />
     <Compile Include="Models\Bean.cs" />
